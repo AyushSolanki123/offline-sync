@@ -1,20 +1,29 @@
 const { logger } = require("../utils/Logger");
 const ErrorBody = require("../utils/ErrorBody");
 const ProductService = require("../services/ProductService");
+const { uploadImageToS3 } = require("../services/ImageUploadService");
 
 async function createProduct(req, res, next) {
-    try {
-        const result = await ProductService.addProduct(req.body);
-        res.status(200);
-        res.json(result);
-    } catch (error) {
-        logger.error("Failed in Create Product: " + JSON.stringify(error));
-        next(
-            new ErrorBody(
-                error.status | 500,
-                error.errorMessage | "Internal server Error"
-            )
-        );
+    let reqBody = req.body;
+    const { file } = req;
+    let imageUrl;
+    if (file) {
+        try {
+            imageUrl = await uploadImageToS3(file);
+            reqBody = { ...reqBody, ...{ image: imageUrl } };
+            const result = await ProductService.addProduct(reqBody);
+            res.status(200);
+            res.json(result);
+        } catch (error) {
+            console.log(error);
+            logger.error("Failed in Create Product: " + JSON.stringify(error));
+            next(
+                new ErrorBody(
+                    error.status | 500,
+                    error.errorMessage | "Internal server Error"
+                )
+            );
+        }
     }
 }
 async function listProducts(req, res, next) {
