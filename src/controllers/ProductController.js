@@ -24,6 +24,21 @@ async function createProduct(req, res, next) {
                 )
             );
         }
+    } else {
+        try {
+            const result = await ProductService.addProduct(reqBody);
+            res.status(200);
+            res.json(result);
+        } catch (error) {
+            console.log(error);
+            logger.error("Failed in Create Product: " + JSON.stringify(error));
+            next(
+                new ErrorBody(
+                    error.status | 500,
+                    error.errorMessage | "Internal server Error"
+                )
+            );
+        }
     }
 }
 async function listProducts(req, res, next) {
