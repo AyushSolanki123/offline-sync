@@ -14,8 +14,10 @@ async function addProduct(reqBody) {
             graphqlOperation(createProduct, { input: reqBody })
         );
         logger.log("DATA: " + JSON.stringify(data));
+        console.log(data);
         return data;
     } catch (error) {
+        console.log(error);
         throw new ErrorBody(500, error.message);
     }
 }
