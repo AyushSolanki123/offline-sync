@@ -1,0 +1,36 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-offlinesync-dev-142851-authRole",
+      "UnauthRoleArn": "arn:aws:iam::672571843572:role/amplify-offlinesync-dev-142851-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::672571843572:role/amplify-offlinesync-dev-142851-authRole",
+      "Region": "ap-south-1",
+      "DeploymentBucketName": "amplify-offlinesync-dev-142851-deployment",
+      "UnauthRoleName": "amplify-offlinesync-dev-142851-unauthRole",
+      "StackName": "amplify-offlinesync-dev-142851",
+      "StackId": "arn:aws:cloudformation:ap-south-1:672571843572:stack/amplify-offlinesync-dev-142851/c23c82b0-d1fd-11ed-96f6-0656df26358a",
+      "AmplifyAppId": "dzrp24dnbf7ja"
+    },
+    "categories": {
+      "function": {
+        "offlineSyncProducts": {
+          "deploymentBucketName": "amplify-offlinesync-dev-142851-deployment",
+          "s3Key": "amplify-builds/offlineSyncProducts-4e46476237632f546643-build.zip"
+        },
+        "offlinesyncmysqllayer": {
+          "deploymentBucketName": "amplify-offlinesync-dev-142851-deployment",
+          "s3Key": "amplify-builds/offlinesyncmysqllayer-LambdaLayerVersionfc97f998-build.zip"
+        }
+      },
+      "api": {
+        "offlinesync": {}
+      },
+      "auth": {
+        "offlinesync689dcdce": {}
+      },
+      "storage": {
+        "offlineSyncProducts": {}
+      }
+    }
+  }
+}

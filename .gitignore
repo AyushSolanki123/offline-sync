@@ -1,5 +1,4 @@
 .vscode
-amplify
 base-models 
 package-lock.json
 .env

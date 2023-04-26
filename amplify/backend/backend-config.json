@@ -1,0 +1,108 @@
+{
+  "api": {
+    "offlinesync": {
+      "dependsOn": [],
+      "output": {
+        "authConfig": {
+          "additionalAuthenticationProviders": [],
+          "defaultAuthentication": {
+            "apiKeyConfig": {
+              "apiKeyExpirationDays": 7
+            },
+            "authenticationType": "API_KEY"
+          }
+        }
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "AppSync"
+    }
+  },
+  "auth": {
+    "offlinesync689dcdce": {
+      "customAuth": false,
+      "dependsOn": [],
+      "frontendAuthConfig": {
+        "mfaConfiguration": "OFF",
+        "mfaTypes": [
+          "SMS"
+        ],
+        "passwordProtectionSettings": {
+          "passwordPolicyCharacters": [],
+          "passwordPolicyMinLength": 8
+        },
+        "signupAttributes": [
+          "EMAIL"
+        ],
+        "socialProviders": [],
+        "usernameAttributes": [],
+        "verificationMechanisms": [
+          "EMAIL"
+        ]
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "Cognito"
+    }
+  },
+  "function": {
+    "offlineSyncProducts": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "offlinesyncmysqllayer"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "offlinesyncmysqllayer": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "LambdaLayer"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_offlineSyncProducts_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "offlineSyncProducts"
+        }
+      ]
+    },
+    "AMPLIFY_function_offlineSyncProducts_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "offlineSyncProducts"
+        }
+      ]
+    },
+    "AMPLIFY_function_offlinesyncmysqllayer_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "offlinesyncmysqllayer"
+        }
+      ]
+    },
+    "AMPLIFY_function_offlinesyncmysqllayer_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "offlinesyncmysqllayer"
+        }
+      ]
+    }
+  },
+  "storage": {
+    "offlineSyncProducts": {
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "S3"
+    }
+  }
+}

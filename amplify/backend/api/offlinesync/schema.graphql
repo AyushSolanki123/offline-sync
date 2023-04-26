@@ -1,0 +1,267 @@
+type Product {
+    id: ID!
+    title: String!
+    price: Float
+    category: String
+    image: String
+    isDeleted: Boolean
+    createdAt: AWSDateTime!
+    updatedAt: AWSDateTime!
+    _version: Int!
+    _deleted: Boolean
+    _lastChangedAt: AWSTimestamp!
+}
+
+input ModelStringInput {
+    ne: String
+    eq: String
+    le: String
+    lt: String
+    ge: String
+    gt: String
+    contains: String
+    notContains: String
+    between: [String]
+    beginsWith: String
+    attributeExists: Boolean
+    attributeType: ModelAttributeTypes
+    size: ModelSizeInput
+}
+
+input ModelIntInput {
+    ne: Int
+    eq: Int
+    le: Int
+    lt: Int
+    ge: Int
+    gt: Int
+    between: [Int]
+    attributeExists: Boolean
+    attributeType: ModelAttributeTypes
+}
+
+input ModelFloatInput {
+    ne: Float
+    eq: Float
+    le: Float
+    lt: Float
+    ge: Float
+    gt: Float
+    between: [Float]
+    attributeExists: Boolean
+    attributeType: ModelAttributeTypes
+}
+
+input ModelBooleanInput {
+    ne: Boolean
+    eq: Boolean
+    attributeExists: Boolean
+    attributeType: ModelAttributeTypes
+}
+
+input ModelIDInput {
+    ne: ID
+    eq: ID
+    le: ID
+    lt: ID
+    ge: ID
+    gt: ID
+    contains: ID
+    notContains: ID
+    between: [ID]
+    beginsWith: ID
+    attributeExists: Boolean
+    attributeType: ModelAttributeTypes
+    size: ModelSizeInput
+}
+
+input ModelSubscriptionStringInput {
+    ne: String
+    eq: String
+    le: String
+    lt: String
+    ge: String
+    gt: String
+    contains: String
+    notContains: String
+    between: [String]
+    beginsWith: String
+    in: [String]
+    notIn: [String]
+}
+
+input ModelSubscriptionIntInput {
+    ne: Int
+    eq: Int
+    le: Int
+    lt: Int
+    ge: Int
+    gt: Int
+    between: [Int]
+    in: [Int]
+    notIn: [Int]
+}
+
+input ModelSubscriptionFloatInput {
+    ne: Float
+    eq: Float
+    le: Float
+    lt: Float
+    ge: Float
+    gt: Float
+    between: [Float]
+    in: [Float]
+    notIn: [Float]
+}
+
+input ModelSubscriptionBooleanInput {
+    ne: Boolean
+    eq: Boolean
+}
+
+input ModelSubscriptionIDInput {
+    ne: ID
+    eq: ID
+    le: ID
+    lt: ID
+    ge: ID
+    gt: ID
+    contains: ID
+    notContains: ID
+    between: [ID]
+    beginsWith: ID
+    in: [ID]
+    notIn: [ID]
+}
+
+enum ModelAttributeTypes {
+    binary
+    binarySet
+    bool
+    list
+    map
+    number
+    numberSet
+    string
+    stringSet
+    _null
+}
+
+input ModelSizeInput {
+    ne: Int
+    eq: Int
+    le: Int
+    lt: Int
+    ge: Int
+    gt: Int
+    between: [Int]
+}
+
+enum ModelSortDirection {
+    ASC
+    DESC
+}
+
+type ModelProductConnection {
+    items: [Product]!
+    nextToken: String
+    startedAt: AWSTimestamp
+}
+
+input ModelProductFilterInput {
+    id: ModelIDInput
+    title: ModelStringInput
+    price: ModelFloatInput
+    category: ModelStringInput
+    image: ModelStringInput
+    isDeleted: ModelBooleanInput
+    and: [ModelProductFilterInput]
+    or: [ModelProductFilterInput]
+    not: ModelProductFilterInput
+}
+
+type Query {
+    getProduct(id: ID!): Product @function(name: "offlineSyncProducts-${env}")
+    listProducts(
+        filter: ModelProductFilterInput
+        limit: Int
+        nextToken: String
+    ): ModelProductConnection @function(name: "offlineSyncProducts-${env}")
+    syncProducts(
+        filter: ModelProductFilterInput
+        limit: Int
+        nextToken: String
+        lastSync: AWSTimestamp
+    ): ModelProductConnection @function(name: "offlineSyncProducts-${env}")
+}
+
+input ModelProductConditionInput {
+    title: ModelStringInput
+    price: ModelFloatInput
+    category: ModelStringInput
+    image: ModelStringInput
+    isDeleted: ModelBooleanInput
+    and: [ModelProductConditionInput]
+    or: [ModelProductConditionInput]
+    not: ModelProductConditionInput
+}
+
+input CreateProductInput {
+    id: ID
+    title: String!
+    price: Float
+    category: String
+    image: String
+    isDeleted: Boolean
+    _version: Int
+}
+
+input UpdateProductInput {
+    id: ID!
+    title: String
+    price: Float
+    category: String
+    image: String
+    isDeleted: Boolean
+    _version: Int
+}
+
+input DeleteProductInput {
+    id: ID!
+    _version: Int
+}
+
+type Mutation {
+    createProduct(
+        input: CreateProductInput!
+        condition: ModelProductConditionInput
+    ): Product @function(name: "offlineSyncProducts-${env}")
+    updateProduct(
+        input: UpdateProductInput!
+        condition: ModelProductConditionInput
+    ): Product @function(name: "offlineSyncProducts-${env}")
+    deleteProduct(
+        input: DeleteProductInput!
+        condition: ModelProductConditionInput
+    ): Product @function(name: "offlineSyncProducts-${env}")
+}
+
+input ModelSubscriptionProductFilterInput {
+    id: ModelSubscriptionIDInput
+    title: ModelSubscriptionStringInput
+    price: ModelSubscriptionFloatInput
+    category: ModelSubscriptionStringInput
+    image: ModelSubscriptionStringInput
+    isDeleted: ModelSubscriptionBooleanInput
+    and: [ModelSubscriptionProductFilterInput]
+    or: [ModelSubscriptionProductFilterInput]
+}
+
+type Subscription {
+    onCreateProduct(filter: ModelSubscriptionProductFilterInput): Product
+        @aws_subscribe(mutations: ["createProduct"])
+    onUpdateProduct(filter: ModelSubscriptionProductFilterInput): Product
+        @aws_subscribe(mutations: ["updateProduct"])
+    onDeleteProduct(filter: ModelSubscriptionProductFilterInput): Product
+        @aws_subscribe(mutations: ["deleteProduct"])
+}
